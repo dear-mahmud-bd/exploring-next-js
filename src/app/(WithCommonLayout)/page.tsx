@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
+
 import { useUser } from "@/context/UserContext";
 
 const HomePage = () => {
@@ -8,7 +8,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <Button>Click Here</Button>
+      <h1>This is NextMart Home Page</h1>
     </div>
   );
 };

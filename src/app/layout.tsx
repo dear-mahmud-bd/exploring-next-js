@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Next Mart",
-  description: "Simple Next Mart Web Application to understand NEXT.JS functionality",
+  description: "Simple Next-Mart Web Application to understand NEXT.JS functionality",
 };
 
 export default function RootLayout({
