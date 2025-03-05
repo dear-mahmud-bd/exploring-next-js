@@ -6,6 +6,7 @@ import ImagePreviewer from "@/components/ui/core/NMImageUploader/ImagePreviewer"
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -26,6 +27,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const CreateCategoryModal = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
   const [imageFiles, setImageFiles] = useState<File[] | []>([]);
   const [imagePreview, setImagePreview] = useState<string[] | []>([]);
 
@@ -45,6 +47,7 @@ const CreateCategoryModal = () => {
 
       if (res?.success) {
         toast.success(res?.message);
+        setModalOpen(false);
       } else {
         toast.error(res?.message);
       }
@@ -54,13 +57,14 @@ const CreateCategoryModal = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
       <DialogTrigger asChild>
         <Button>Create Category</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create Product Category</DialogTitle>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
