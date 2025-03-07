@@ -1,17 +1,31 @@
 "use client";
 
 import { NMTable } from "@/components/ui/core/NMTable/index";
-import { IProduct } from "@/types";
+import { IMeta, IProduct } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit, Eye, Plus, Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useState } from "react";
+import DiscountModal from "./DiscountModal";
+import TablePagination from "@/components/ui/core/NMTable/TablePagination";
 
-const ManageProducts = ({ products }: { products: IProduct[] }) => {
+const ManageProducts = ({
+  products,
+  meta,
+}: {
+  products: IProduct[];
+  meta: IMeta;
+}) => {
   const router = useRouter();
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[] | []>([]);
+  console.log(selectedIds);
 
   const handleView = (product: IProduct) => {
+    setModalOpen(true);
     console.log("Viewing product:", product);
   };
 
@@ -20,6 +34,37 @@ const ManageProducts = ({ products }: { products: IProduct[] }) => {
   };
 
   const columns: ColumnDef<IProduct>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => {
+            if (value) {
+              setSelectedIds((prev) => [...prev, row.original._id]);
+            } else {
+              setSelectedIds(
+                selectedIds.filter((id) => id !== row.original._id)
+              );
+            }
+            row.toggleSelected(!!value);
+          }}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       accessorKey: "name",
       header: "Product Name",
@@ -113,9 +158,16 @@ const ManageProducts = ({ products }: { products: IProduct[] }) => {
           >
             Add Product <Plus />
           </Button>
+          <DiscountModal
+            isOpen={isModalOpen}
+            onOpenChange={setModalOpen}
+            selectedIds={selectedIds}
+            setSelectedIds={setSelectedIds}
+          />
         </div>
       </div>
       <NMTable columns={columns} data={products || []} />
+      <TablePagination totalPage={meta?.totalPage} />
     </div>
   );
 };

@@ -16,11 +16,9 @@ type TCategoriesProps = {
 };
 
 const ManageCategories = ({ categories }: TCategoriesProps) => {
-
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
-
 
   const handleDelete = (data: ICategory) => {
     console.log(data);

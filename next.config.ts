@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    // this is for big size image uploading condition...
+    serverActions: {
+      bodySizeLimit: "5mb",
+    },
+  },
 };
 
 export default nextConfig;
