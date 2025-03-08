@@ -1,11 +1,16 @@
+"use client";
+
 import Image from "next/image";
 import emptyCart from "@/assets/emty-cart.png";
-import { getAllProducts } from "@/services/Product";
 import CartProductCard from "./CartProductCard";
-import { IProduct } from "@/types";
-export default async function CartProducts() {
-  const { data: products } = await getAllProducts();
+// import { IProduct } from "@/types";
+import { useAppSelector } from "@/redux/hooks";
+import { CartProduct, orderedProductsSelector } from "@/redux/features/cartSlice";
 
+export default function CartProducts() {
+  const products = useAppSelector(orderedProductsSelector);
+  // console.log("CartProducts-",products);
+  
   return (
     <div className="border-2 border-white bg-background brightness-105 rounded-md col-span-8 h-full row-span-3 p-10 space-y-5">
       {products.length === 0 && (
@@ -16,11 +21,11 @@ export default async function CartProducts() {
             some items!
           </p>
           <div className="flex justify-center items-center ">
-            <Image src={emptyCart} alt="empty cart" />
+            <Image src={emptyCart} width={500} height={500} alt="empty cart"/>
           </div>
         </div>
       )}
-      {products.map((product: IProduct) => (
+      {products?.map((product: CartProduct) => (
         <CartProductCard key={product._id} product={product} />
       ))}
     </div>
